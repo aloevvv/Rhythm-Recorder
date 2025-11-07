@@ -36,7 +36,7 @@
       if (startTime === null) return;
       const timestamp = ((performance.now() - startTime) / 1000).toFixed(3);
       const entry = document.createElement("li");
-      entry.textContent = `Key "${e.key}" p ${timestamp} sec`;
+      entry.textContent = `"${e.key}" press ${timestamp} sec`;
       logList.appendChild(entry);
     });
   </script>
