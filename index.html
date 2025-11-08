@@ -1,4 +1,16 @@
-<script>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rhythm Chart Recorder</title>
+</head>
+<body>
+  <h1>Rhythm Chart Recorder</h1>
+  <input type="file" id="audioFile" accept="audio/*"><br><br>
+  <button id="startBtn">Start</button>
+  <p>Press keys while the song plays. Timestamps will be recorded.</p>
+  <ul id="log"></ul>
+
+  <script>
   let audio = new Audio();
   let startTime = null;
   let activeKeys = {};
@@ -32,3 +44,7 @@
     delete activeKeys[e.key];
   });
 </script>
+</body>
+</html>
+
+
