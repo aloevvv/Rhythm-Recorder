@@ -17,10 +17,6 @@
   let logList = document.getElementById("log");
 
   document.getElementById("startBtn").addEventListener("click", function() {
-    if (!audio.src) {
-      alert("Please select an audio file first.");
-      return;
-    }
     logList.innerHTML = "";
     startTime = performance.now();
     audio.play();
