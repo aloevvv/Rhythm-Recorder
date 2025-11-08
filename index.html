@@ -1,44 +1,34 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Rhythm Chart Recorder</title>
-</head>
-<body>
-  <h1>Rhythm Chart Recorder</h1>
-  <input type="file" id="audioFile" accept="audio/*"><br><br>
-  <button id="startBtn">Start</button>
-  <p>Press keys while the song plays. Timestamps will be recorded.</p>
-  <ul id="log"></ul>
+<script>
+  let audio = new Audio();
+  let startTime = null;
+  let activeKeys = {};
+  let logList = document.getElementById("log");
 
-  <script>
-    let audio = new Audio();
-    let startTime = null;
-    let logList = document.getElementById("log");
+  document.getElementById("startBtn").addEventListener("click", function() {
+    if (!audio.src) {
+      alert("Please select an audio file first.");
+      return;
+    }
+    logList.innerHTML = "";
+    startTime = performance.now();
+    audio.play();
+  });
 
-    document.getElementById("audioFile").addEventListener("change", function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        audio.src = URL.createObjectURL(file);
-      }
-    });
+  document.addEventListener("keydown", function(e) {
+    if (startTime === null || activeKeys[e.key]) return;
+    activeKeys[e.key] = performance.now();
+  });
 
-    document.getElementById("startBtn").addEventListener("click", function() {
-      if (!audio.src) {
-        alert("Please select an audio file first.");
-        return;
-      }
-      logList.innerHTML = "";
-      startTime = performance.now();
-      audio.play();
-    });
+  document.addEventListener("keyup", function(e) {
+    if (startTime === null || !activeKeys[e.key]) return;
+    const pressTime = ((activeKeys[e.key] - startTime) / 1000).toFixed(3);
+    const releaseTime = ((performance.now() - startTime) / 1000).toFixed(3);
+    const duration = (releaseTime - pressTime).toFixed(3);
 
-    document.addEventListener("keydown", function(e) {
-      if (startTime === null) return;
-      const timestamp = ((performance.now() - startTime) / 1000).toFixed(3);
-      const entry = document.createElement("li");
-      entry.textContent = `"${e.key}" press ${timestamp} sec`;
-      logList.appendChild(entry);
-    });
-  </script>
-</body>
-</html>
+    const entry = document.createElement("li");
+    entry.textContent = `"${e.key}" press ${pressTime}s, held ${duration}s`;
+    logList.appendChild(entry);
+
+    delete activeKeys[e.key];
+  });
+</script>
